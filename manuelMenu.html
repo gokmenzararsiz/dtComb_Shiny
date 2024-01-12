@@ -1,0 +1,119 @@
+    <style>
+      @media screen and (min-width:1251px) {
+        .menu-container{
+       max-width:350px;
+       background:#e4e5e7;
+       /*margin:40px auto;*/
+       padding:10px 0px 20px 0px;
+       /*border:1px solid #111;*/
+       border-radius:4px;
+       box-shadow:0px 4px 5px rgba(0, 0, 0, 0.75);
+       position: fixed;
+       min-width: 300px;
+    }
+      }
+      @media screen and (max-width:1250px){
+        .menu-container{
+       max-width:350px;
+       background:#e4e5e7;
+       /*margin:40px auto;*/
+       padding:10px 0px 20px 0px;
+       /*border:1px solid #111;*/
+       border-radius:4px;
+       box-shadow:0px 4px 5px rgba(0, 0, 0, 0.75);
+       min-width: 300px;
+    }
+      }
+    .menu-link{
+       font-size:16px;
+       font-weight:300;
+      /* text-align:center;*/
+  
+       position:relative;
+       height:35px;
+       line-height:40px;
+      /* margin-top:10px;*/
+       overflow:hidden;
+       width:90%;
+       margin-left:10%;
+       cursor:pointer;
+    }
+    .menu-link:after{
+       content: '';
+       position:absolute;
+       width:80%;
+       border-bottom:1px solid rgba(255, 255, 255, 0.5);
+       bottom:50%;
+       left:-100%;
+       transition-delay: all 0.5s;
+       transition: all 0.5s;
+    }
+   
+    .menu-link .menu-text{
+       text-shadow:0px -40px 0px rgba(0, 0, 0, 1);
+       transition:all 0.75s;
+       transform:translateY(100%) translateZ(0);
+       transition-delay:all 0.25s;
+    }
+    .menu-link .menu-text a { color: inherit; text-decoration:none; }
+    .menu-link:hover .menu-text,
+    .menu-link.hover .menu-text{
+       text-shadow:0px -40px 0px rgba(0, 0, 0, 1);
+       transform:translateY(0%) translateZ(0) scale(1.01);
+       font-weight:600;
+       /*margin-left: 10px;*/
+    }
+    .sub{
+        margin-left: 20px;
+    }
+    </style>
+    <div class="menu-container">
+        <div class="menu-link">
+          <div class="menu-text"><a href="#DataUpload">Data Upload</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text"><a href="#combAppro">Combination Approach</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text sub"><a href="#linComb">Linear Combination Methods</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text sub"><a href="#nonlinComb">Nonlinear Combination Methods</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text sub"><a href="#mathComb">Mathematical Operators</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text sub"><a href="#mlComb">Machine-Learning Algorithms</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text"><a href="#resampling">Resampling methods</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text"><a href="#standardiza">Standardization methods</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text"><a href="#outputs">Outputs</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text sub"><a href="#plots">Plots</a></div>
+        </div>
+        <div class="menu-link">
+          <div class="menu-text"><a href="#predict">Predict</a></div>
+        </div>
+      </div>
+    
+      <script>
+        //For Demo only
+    var links = document.getElementsByClassName('link')
+    for(var i = 0; i <= links.length; i++)
+       addClass(i)
+    
+    
+    function addClass(id){
+       setTimeout(function(){
+          if(id > 0) links[id-1].classList.remove('hover')
+          links[id].classList.add('hover')
+       }, id*750) 
+    }
+      </script>

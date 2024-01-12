@@ -1,0 +1,16 @@
+{
+    "functions":[
+        {"id":"1","text":"mlComb"},
+        {"id":"2","text":"linComb"},
+        {"id":"3","text":"nonLinComb"}
+    ],
+    "methods":[
+        {"id":"1","text":"a","functionId":"1"},
+        {"id":"2","text":"b","functionId":"1"},
+        {"id":"3","text":"c","functionId":"2"},
+        {"id":"4","text":"d","functionId":"2"},
+        {"id":"5","text":"3","functionId":"3"},
+        {"id":"6","text":"3","functionId":"3"}
+    ]
+
+}
