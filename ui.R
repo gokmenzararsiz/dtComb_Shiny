@@ -52,86 +52,46 @@ ui <- fluidPage(
                       sidebarPanel(
                         "Input data", width = 3,
                         radioButtons("dataInput", "", list("Upload a file" = 1,"Load example data" = 2), selected = 2),
-                        tabsetPanel(id = "tabGroupDataUpload",
-                                    tabPanel(id="result1",title= "analizTab",
-                                             HTML('<br>'),
-                                             conditionalPanel(condition = "input.dataInput == '2'",
-                                                              selectInput("selectMarker3", "Marker 1 variable", choices = NULL),
-                                                              selectInput("selectMarker4", "Marker 2 variable", choices = NULL),
-                                                              selectInput("selectStatus2", "Status variable", choices = NULL),
-                                                              selectInput("event2","Select category for cases", choices = NULL),
-                                                              radioButtons("sampleData", "Datasets:", 
-                                                                           list("Abdominal pain data (n = 225, p = 3)" = 1,
-                                                                                "DMD data (n = 120, p = 5)" = 2,
-                                                                                "Simalation data (n = 500, p = 3)" = 3), 
-                                                                           selected = 1),
-                                                              tags$p(tags$b('n:'), ' number of observations'),
-                                                              HTML('<p><b>p</b>: number of variables</p>')
-                                             ),
-                                             conditionalPanel(condition = "input.dataInput == '1'",
-                                                              # HTML('<br>'),
-                                                              # h5("Upload a delimited text file (max. 30MB): "),
-                                                              #HTML('<i class="fa fa-beer fa-lg"></i>'),
-                                                              fileInput("upload", "", multiple = FALSE),
-                                                              radioButtons("fileSepDF", "Delimiter:", 
-                                                                           list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
-                                                                           selected = 2),
-                                                              # conditionalPanel(condition = "input.fileSepDF != '1'",
-                                                              #                  checkboxInput(inputId = "decimal", label = "Use comma as decimal", value = FALSE)
-                                                              # ),
-                                                              selectInput("selectMarker1", "Marker 1 variable", choices = NULL),
-                                                              selectInput("selectMarker2", "Marker 2 variable", choices = NULL),
-                                                              selectInput("selectStatus1", "Status variable", choices = NULL),
-                                                              selectInput("event1", "Select category for cases", choices = NULL),
-                                                              
-                                                              
-                                                              
-                                                              
-                                                              HTML('<br>'),
-                                                              HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
-                                                              HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
-                                             )
-                                    ),
-                                    tabPanel(id="result2",title= "rocTab",
-                                             conditionalPanel(condition = "input.dataInput == '2'",
-                                                              HTML('<br>'),
-                                                              selectInput("selectMarker3Roc", "Select markers (*)", multiple = TRUE, choices = NULL),
-                                                              selectInput("selectStatus2Roc", "Status variable", choices = NULL),
-                                                              selectInput("event2Roc","Select category for cases", choices = NULL),
-                                                              radioButtons("sampleDataRoc", "Datasets:", 
-                                                                           list("Abdominal pain data (n = 225, p = 3)" = 1,
-                                                                                "DMD data (n = 120, p = 5)" = 2,
-                                                                                "Simalation data (n = 500, p = 3)" = 3), 
-                                                                           selected = 1),
-                                                              tags$p(tags$b('n:'), ' number of observations'),
-                                                              HTML('<p><b>p</b>: number of variables</p>')
-                                             ),
-                                             conditionalPanel(condition = "input.dataInput == '1'",
-                                                              # HTML('<br>'),
-                                                              # h5("Upload a delimited text file (max. 30MB): "),
-                                                              #HTML('<i class="fa fa-beer fa-lg"></i>'),
-                                                              fileInput("uploadRoc", "", multiple = FALSE),
-                                                              radioButtons("fileSepDFRoc", "Delimiter:", 
-                                                                           list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
-                                                                           selected = 2),
-                                                              # conditionalPanel(condition = "input.fileSepDF != '1'",
-                                                              #                  checkboxInput(inputId = "decimal", label = "Use comma as decimal", value = FALSE)
-                                                              # ),
-                                                              selectInput("selectMarker1Roc", "Select markers (*)", multiple = TRUE, choices = NULL),
-                                                              selectInput("selectStatus1Roc", "Status variable", choices = NULL),
-                                                              selectInput("event1Roc", "Select category for cases", choices = NULL),
-                                                              
-                                                              HTML('<br>'),
-                                                              HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
-                                                              HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
-                                             )
-                                             ),
-                                    )
-                        
+                        conditionalPanel(condition = "input.dataInput == '2'",
+                                         selectInput("selectMarker3", "Marker 1 variable", choices = NULL),
+                                         selectInput("selectMarker4", "Marker 2 variable", choices = NULL),
+                                         selectInput("selectStatus2", "Status variable", choices = NULL),
+                                         selectInput("event2","Select category for cases", choices = NULL),
+                                         h5(tags$b("Datasets:")),
+                                         radioButtons("sampleData", "Examples", 
+                                                      list("Abdominal pain data (n = 225, p = 3)" = 1,
+                                                           "DMD data (n = 120, p = 5)" = 2,
+                                                           "Simalation data (n = 500, p = 3)" = 3), 
+                                                      selected = 1),
+                                         tags$p(tags$b('n:'), ' number of observations'),
+                                         HTML('<p><b>p</b>: number of variables</p>')
+                        ),
+                        conditionalPanel(condition = "input.dataInput == '1'",
+                                         # HTML('<br>'),
+                                         # h5("Upload a delimited text file (max. 30MB): "),
+                                         #HTML('<i class="fa fa-beer fa-lg"></i>'),
+                                         fileInput("upload", "", multiple = FALSE),
+                                         radioButtons("fileSepDF", "Delimiter:", 
+                                                      list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
+                                                      selected = 2),
+                                         # conditionalPanel(condition = "input.fileSepDF != '1'",
+                                         #                  checkboxInput(inputId = "decimal", label = "Use comma as decimal", value = FALSE)
+                                         # ),
+                                         selectInput("selectMarker1", "Marker 1 variable", choices = NULL),
+                                         selectInput("selectMarker2", "Marker 2 variable", choices = NULL),
+                                         selectInput("selectStatus1", "Status variable", choices = NULL),
+                                         selectInput("event1", "Select category for cases", choices = NULL),
+                                         
+                                         
+                                         
+                                         
+                                         HTML('<br>'),
+                                         HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
+                                         HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
+                        ),
                       ),
                       mainPanel(width = 9, DT::dataTableOutput("RawData"))
              ),
-             tabPanel("Roc","",width =3 ," roc tab", style="display:none"),
              tabPanel("Analysis", 
                       sidebarPanel(
                         "", width = 3,
