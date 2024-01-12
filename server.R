@@ -1278,7 +1278,19 @@ hush=function(code){
 }
 
 server <- function(input, output, session) {
-
+  
+  observeEvent(input$tabGroupDataUpload, {
+    tabName <- input$tabGroupDataUpload;
+    if(tabName == "rocTab")
+    {
+      shiny::hideTab(inputId = "generalTabSetPanel", target = "Analysis")
+      shiny::showTab(inputId = "generalTabSetPanel", target = "Roc")
+    }else{
+      shiny::hideTab(inputId = "generalTabSetPanel", target = "Roc")
+      shiny::showTab(inputId = "generalTabSetPanel", target = "Analysis")
+      
+    }
+  })
   observeEvent(input$functions, {
     
     selectedMethods <- as.matrix(methods[which(methods[,1] == input$functions),2])
