@@ -42,7 +42,7 @@ ui <- fluidPage(
                                         </div>
                                         </div>
                                      '),  
-                        HTML('<p align="justify"> If you use this tool for your research please cite: …</p>')
+                        HTML('<p align="justify"> If you use this tool for your research please cite: ???</p>')
                         
                         
                         
@@ -52,36 +52,39 @@ ui <- fluidPage(
                       sidebarPanel(
                         "Input data", width = 3,
                         radioButtons("dataInput", "", list("Upload a file" = 1,"Load example data" = 2), selected = 2),
+                        conditionalPanel(condition = "input.dataInput == '1'",
+                                         fileInput("upload", "", multiple = FALSE),
+                                         radioButtons("fileSepDF", "Delimiter:", 
+                                                      list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
+                                                      selected = 2),
+                                         
+                                         HTML('<br>'),
+                                         HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
+                                         HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
+                        ),
                         tabsetPanel(id = "tabGroupDataUpload",
-                                    tabPanel(id="result1",title= "analizTab",
+                                    tabPanel("Analysis","",
                                              HTML('<br>'),
+                                             HTML('<p align="justify">The "Analysis" tab should be used for analysis to combine two diagnostic test markers. If you want to evaluate the performance of a single diagnostic test or compare the performance of more than one diagnostic test, the "ROC Analysis for Single Marker(s)" tab should be selected.</p>'),
                                              conditionalPanel(condition = "input.dataInput == '2'",
-                                                              selectInput("selectMarker3", "Marker 1 variable", choices = NULL),
-                                                              selectInput("selectMarker4", "Marker 2 variable", choices = NULL),
-                                                              selectInput("selectStatus2", "Status variable", choices = NULL),
+                                                              selectInput("selectMarker3", "Marker 1", choices = NULL),
+                                                              selectInput("selectMarker4", "Marker 2", choices = NULL),
+                                                              selectInput("selectStatus2", "Status", choices = NULL),
                                                               selectInput("event2","Select category for cases", choices = NULL),
-                                                              radioButtons("sampleData", "Datasets:", 
+                                                              h5(tags$b("Datasets:")),
+                                                              radioButtons("sampleData", "Examples", 
                                                                            list("Abdominal pain data (n = 225, p = 3)" = 1,
                                                                                 "DMD data (n = 120, p = 5)" = 2,
-                                                                                "Simalation data (n = 500, p = 3)" = 3), 
+                                                                                "Simulation data (n = 500, p = 3)" = 3), 
                                                                            selected = 1),
                                                               tags$p(tags$b('n:'), ' number of observations'),
                                                               HTML('<p><b>p</b>: number of variables</p>')
                                              ),
                                              conditionalPanel(condition = "input.dataInput == '1'",
-                                                              # HTML('<br>'),
-                                                              # h5("Upload a delimited text file (max. 30MB): "),
-                                                              #HTML('<i class="fa fa-beer fa-lg"></i>'),
-                                                              fileInput("upload", "", multiple = FALSE),
-                                                              radioButtons("fileSepDF", "Delimiter:", 
-                                                                           list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
-                                                                           selected = 2),
-                                                              # conditionalPanel(condition = "input.fileSepDF != '1'",
-                                                              #                  checkboxInput(inputId = "decimal", label = "Use comma as decimal", value = FALSE)
-                                                              # ),
-                                                              selectInput("selectMarker1", "Marker 1 variable", choices = NULL),
-                                                              selectInput("selectMarker2", "Marker 2 variable", choices = NULL),
-                                                              selectInput("selectStatus1", "Status variable", choices = NULL),
+                                                              
+                                                              selectInput("selectMarker1", "Marker 1", choices = NULL),
+                                                              selectInput("selectMarker2", "Marker 2", choices = NULL),
+                                                              selectInput("selectStatus1", "Status", choices = NULL),
                                                               selectInput("event1", "Select category for cases", choices = NULL),
                                                               
                                                               
@@ -90,48 +93,103 @@ ui <- fluidPage(
                                                               HTML('<br>'),
                                                               HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
                                                               HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
-                                             )
+                                             ),
+                                             actionButton("goButtonAnalysis", "Go!", style="color: #fff; background-color: #2db83d; border-color: #2e6da4"),
+                                             
                                     ),
-                                    tabPanel(id="result2",title= "rocTab",
+                                    tabPanel("ROC Analysis for Single Marker(s)","",
                                              conditionalPanel(condition = "input.dataInput == '2'",
-                                                              HTML('<br>'),
-                                                              selectInput("selectMarker3Roc", "Select markers (*)", multiple = TRUE, choices = NULL),
-                                                              selectInput("selectStatus2Roc", "Status variable", choices = NULL),
+                                                              selectInput("selectMarker3Roc", "Select markers (*)", choices = NULL,multiple = TRUE),
+                                                              HTML('<p><b>Note</b>: A maximum of 8 markers can be selected.</p>'),
+                                                              selectInput("selectStatus2Roc", "Status ", choices = NULL),
                                                               selectInput("event2Roc","Select category for cases", choices = NULL),
-                                                              radioButtons("sampleDataRoc", "Datasets:", 
+                                                              h5(tags$b("Datasets:")),
+                                                              radioButtons("sampleDataRoc", "Examples", 
                                                                            list("Abdominal pain data (n = 225, p = 3)" = 1,
                                                                                 "DMD data (n = 120, p = 5)" = 2,
-                                                                                "Simalation data (n = 500, p = 3)" = 3), 
+                                                                                "Simulation data (n = 500, p = 3)" = 3), 
                                                                            selected = 1),
                                                               tags$p(tags$b('n:'), ' number of observations'),
                                                               HTML('<p><b>p</b>: number of variables</p>')
                                              ),
                                              conditionalPanel(condition = "input.dataInput == '1'",
-                                                              # HTML('<br>'),
-                                                              # h5("Upload a delimited text file (max. 30MB): "),
-                                                              #HTML('<i class="fa fa-beer fa-lg"></i>'),
-                                                              fileInput("uploadRoc", "", multiple = FALSE),
-                                                              radioButtons("fileSepDFRoc", "Delimiter:", 
-                                                                           list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
-                                                                           selected = 2),
-                                                              # conditionalPanel(condition = "input.fileSepDF != '1'",
-                                                              #                  checkboxInput(inputId = "decimal", label = "Use comma as decimal", value = FALSE)
-                                                              # ),
-                                                              selectInput("selectMarker1Roc", "Select markers (*)", multiple = TRUE, choices = NULL),
-                                                              selectInput("selectStatus1Roc", "Status variable", choices = NULL),
-                                                              selectInput("event1Roc", "Select category for cases", choices = NULL),
                                                               
+                                                              selectInput("selectMarker1Roc", "Select markers (*)", choices = NULL,multiple = TRUE),
+                                                              HTML('<p><b>Note</b>: A maximum of 8 markers can be selected.</p>'),
+                                                              selectInput("selectStatus1Roc", "Status ", choices = NULL),
+                                                              selectInput("event1Roc", "Select category for cases", choices = NULL),
                                                               HTML('<br>'),
                                                               HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
                                                               HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
-                                             )
-                                    ),
+                                             ),   
+                                             checkboxInput("chxAdvancedRoc","Advanced",value=0),
+                                             conditionalPanel(id ="chxAdvancedRoc", condition = "input.chxAdvancedRoc == '1'",
+                                                              selectInput("cutoffmethodRoc",
+                                                                          "Select a method for optimal cut-off",
+                                                                          choices = as.matrix(unlist(strsplit(as.character(cutoffMethod[, 3]), ',', fixed=T))),
+                                                                          selected = FALSE,
+                                                                          multiple = FALSE),
+                                                              selectInput("directionRoc",
+                                                                          "Direction",
+                                                                          choices = as.matrix(unlist(strsplit(as.character(direction[, 3]), ',', fixed=T))),
+                                                                          selected = FALSE,
+                                                                          multiple = FALSE),
+                                                              numericInput("conflevelRoc",
+                                                                           "Confidence Level",
+                                                                           value = 0.95,
+                                                                           step = 0.01,
+                                                                           max = 1,
+                                                                           min = 0)
+                                             ),
+                                             actionButton("goButtonRoc", "Go!", style="color: #fff; background-color: #2db83d; border-color: #2e6da4"),
+                                    )
                         )
-                        
                       ),
                       mainPanel(width = 9, DT::dataTableOutput("RawData"))
              ),
-             tabPanel("Roc","",width =3 ," roc tab deneme", style="display:none"),
+             tabPanel("ROC",
+                      mainPanel(id="outputModelFitRoc",
+                                width = 9,
+                                tabsetPanel(id = "tabGroupPlotRoc",
+                                            tabPanel(id="resultRoc",title= "Results",
+                                                     bsCollapse(id = "collapseExampleRoc", open = "AUC Table",
+                                                                bsCollapsePanel("ROC Coordinates", "",
+                                                                                tabsetPanel(id = "tabGroupCoordinatesRoc"
+                                                                                            # Dinamik olu??acak 1
+                                                                                            
+                                                                                ), style = "rocCurv"),
+                                                                bsCollapsePanel("AUC Table", "",
+                                                                                DT::dataTableOutput("AUCTableRoc")
+                                                                                , style = "aucTable"),
+                                                                bsCollapsePanel("Multiple Comparison Table", "",
+                                                                                DT::dataTableOutput("MultCombTableRoc")
+                                                                                , style = "multComb"),
+                                                                bsCollapsePanel("Cut Points", "",
+                                                                                tabsetPanel(id = "tabGroupCutPointsRoc"
+                                                                                            # Dinamik olu??acak 2
+                                                                                ), style = "multComb"),
+                                                                
+                                                                bsCollapsePanel("Performance Measures", "",
+                                                                                tabsetPanel(id = "tabGroupDiagStatRoc"
+                                                                                            # Dinamik Olu??acak 3
+                                                                                            
+                                                                                )
+                                                                                , style = "diagStat")
+                                                                
+                                                     )
+                                            ),
+                                            tabPanel(id ="plot",title= "Plots", 
+                                                     fluidRow(
+                                                       column(10, align="center",
+                                                              
+                                                              plotOutput(outputId = "ROCplotRoc", width  = "500px",height = "400px")
+                                                       ),
+                                                       column(2, align="right",
+                                                              actionButton("printRocBtnRoc", "print",icon("print"))
+                                                       ))
+                                            )
+                                ))
+                      ,width=3,"",style="display:none"),
              tabPanel("Analysis", 
                       sidebarPanel(
                         "", width = 3,
@@ -413,31 +471,31 @@ ui <- fluidPage(
                         HTML('<b id = "linComb">Linear Combination Methods</b> '),
                         HTML('<ul><li><p> <i> Scoring </i></p></li></ul>'),
                         HTML('<ul> The binary logistic regression model is used. However, for a more straightforward interpretation, slope values are rounded to a given <b>digit number</b>, and the combination score is computed. </ul>'),
-                        HTML('<ul><li><p> <i> Su & Liu’s </i></p></li></ul>'),
-                        HTML('<ul> Su and Liu’s combination score is obtained by using <b>Fisher’s discriminant function</b> under the assumption of a multivariate normal distribution model and proportional covariance matrices.</ul>'),
+                        HTML('<ul><li><p> <i> Su & Liu???s </i></p></li></ul>'),
+                        HTML('<ul> Su and Liu???s combination score is obtained by using <b>Fisher???s discriminant function</b> under the assumption of a multivariate normal distribution model and proportional covariance matrices.</ul>'),
                         HTML('<ul><li><p> <i> Logistic regression </i></p></li></ul>'), 
                         HTML('<ul> A binary logistic regression model is fitted using the <b>maximum-likelihood method</b>.</ul>'),
                         HTML('<ul><li><p> <i> Min-Max </i></p></li></ul>'), 
-                        HTML('<ul> This method linearly combines the minimum and maximum values of the markers by finding a <b> parameter λ</b> that maximizes the corresponding <b>Mann-Whitney statistic</b>.</ul>'),
-                        HTML('<ul><li><p> <i> Pepe & Thompson’s </i></p></li></ul>'), 
-                        HTML('<ul>Uses the same binary logistic regression model. The combination score is obtained by proportioning the slope values to calculate the <b>λ parameter</b> .</ul>'),
-                        HTML('<ul><li><p> <i> Pepe, Cai & Langton’s  </i></p></li></ul>'),    
+                        HTML('<ul> This method linearly combines the minimum and maximum values of the markers by finding a <b> parameter ??</b> that maximizes the corresponding <b>Mann-Whitney statistic</b>.</ul>'),
+                        HTML('<ul><li><p> <i> Pepe & Thompson???s </i></p></li></ul>'), 
+                        HTML('<ul>Uses the same binary logistic regression model. The combination score is obtained by proportioning the slope values to calculate the <b>?? parameter</b> .</ul>'),
+                        HTML('<ul><li><p> <i> Pepe, Cai & Langton???s  </i></p></li></ul>'),    
                         HTML('<ul>Pepe, Cai, and Langton combination score is obtained by using <b>AUC as the parameter</b> of a logistic regression model</ul>'),
                         HTML('<ul><li><p> <i> Minimax </i></p></li></ul>'), 
-                        HTML('<ul>Minimax method is an extension of Su & Liu’s method.</ul>'),
-                        HTML('<ul><li><p> <i> Todor & Saplacan’s</i></p></li></ul>'), 
-                        HTML('<ul>Todor and Saplacan’s method uses trigonometric functions to calculate the combination score. The combination score is obtained by the <b>θ value</b> that optimizes the corresponding AUC.</ul>'),
+                        HTML('<ul>Minimax method is an extension of Su & Liu???s method.</ul>'),
+                        HTML('<ul><li><p> <i> Todor & Saplacan???s</i></p></li></ul>'), 
+                        HTML('<ul>Todor and Saplacan???s method uses trigonometric functions to calculate the combination score. The combination score is obtained by the <b>?? value</b> that optimizes the corresponding AUC.</ul>'),
                         HTML('<div style="left;"><img src="images/manual/linComb.png" width=400/></div>'),
                         
                         HTML('<b id="nonlinComb">Nonlinear Combination Methods</b> '),
                         HTML('<ul><li><p> <i> Polynomial Regression </i></p></li></ul>'),
                         HTML('<ul> The method builds a logistic regression model with the feature space created and returns the probability of a positive event for each observation. It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<ul><li><p> <i> Ridge Regression </i></p></li></ul>'),
-                        HTML('<ul> Ridge regression is a penalizing method used to estimate the coefficients of highly correlated variables and in this case the polynomial feature space created from two biomarkers. For the implementation of the method, <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"> glmnet</a> library  is used with two functions: <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/cv.glmnet" target="_blank"> cv.glmnet()</a> to run a cross validation  model to determine the tuning parameter <b>λ</b> and <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/glmnet" target="_blank"> glmnet()</a> to fit the model with the selected tuning parameter.It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
+                        HTML('<ul> Ridge regression is a penalizing method used to estimate the coefficients of highly correlated variables and in this case the polynomial feature space created from two biomarkers. For the implementation of the method, <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"> glmnet</a> library  is used with two functions: <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/cv.glmnet" target="_blank"> cv.glmnet()</a> to run a cross validation  model to determine the tuning parameter <b>??</b> and <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/glmnet" target="_blank"> glmnet()</a> to fit the model with the selected tuning parameter.It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<ul><li><p> <i> Lasso Regression </i></p></li></ul>'), 
                         HTML('<ul> Lasso regression is also a penalizing method with one difference is that at the end this method returns the coefficients of <b>some features as 0</b>, makes this method useful for feature elimination as well. The implementation is similar to Ridge regression, cross validation for parameter selection and model fit are implemented with <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"> glmnet</a> library.It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<ul><li><p> <i> Elastic-Net Regression </i></p></li></ul>'), 
-                        HTML('<ul> Elastic Net regression is obtained by combining the penalties of Ridge and Lasso regression to get the best of both models. The model again includes a tuning parameter λ as well as a <b>mixing parameter α</b> taken form the user which takes a value between 0 (ridge) and 1 (lasso) to determine the weights of the loss functions of Ridge and Lasso regressions. It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
+                        HTML('<ul> Elastic Net regression is obtained by combining the penalties of Ridge and Lasso regression to get the best of both models. The model again includes a tuning parameter ?? as well as a <b>mixing parameter ??</b> taken form the user which takes a value between 0 (ridge) and 1 (lasso) to determine the weights of the loss functions of Ridge and Lasso regressions. It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<b>In nonlinear approaches, polynomial, ridge and lasso regression methods, an interaction that may exist between two diagnostic tests can be included in the model. For this, the Include of interaction option must be selected as TRUE.</b>'),
                         HTML('<ul><li><p> <i> Splines </i></p></li></ul>'), 
                         HTML('<ul>With the applications of regression models in a polynomial feature space the second non-linear approach to combining biomarkers comes from applying several regression models to the dataset using a function derived from piecewise polynomials. Splines are implemented with <b>degrees of freedom</b> and <b>degrees</b> of the fitted polynomials taken from the user. For the implementation <a href="https://www.rdocumentation.org/packages/splines/versions/3.6.2" target="_blank"> splines</a> library  is used to build piecewise logistic regression models with base splines.</ul>'),
