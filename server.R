@@ -258,7 +258,7 @@ server <- function(input, output, session) {
                           choices = c("",dataHeader)
         )
       }else{
-        if(length(dataHeader) < 4){
+        if(length(dataHeader) < 3){
           shinyalert(
             title = "Attention",
             text = "Combination methods are not used with a single marker. You are redirected to the ROC Analysis for Single Marker(s) tab. You can perform ROC Analysis of this marker.",
