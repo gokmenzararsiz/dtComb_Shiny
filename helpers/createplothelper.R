@@ -64,10 +64,13 @@ createROCPlotRoc <- function(input, output, session){
     if(i > 1)
       isAdd <- T
     colorCode <-  colorCodes[i]
+    oldpar <- graphics::par(no.readonly = TRUE)
+    on.exit(graphics::par(oldpar))
+    graphics::par(pty = "s")
     roc.m1 <- suppressMessages(roc(status ~ markers[, i],
                                          plot = TRUE, print.auc = F,
                                          direction = direction, col =colorCode, lwd = 6, legacy.axes = TRUE, grid = TRUE,
-                                         percent = T, main = "ROC Curves for Combination Diagnostic Test", add = isAdd
+                                         percent = F, main = "ROC Curves for Combination Diagnostic Test", add = isAdd
     ))
     colorCodes <- c(colorCodes,colorCode)
     rocList[[paste0("roc.m",i)]] = roc.m1
