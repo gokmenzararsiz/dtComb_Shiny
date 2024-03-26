@@ -294,11 +294,24 @@ createROCPlot <- function(input, output, session){
   }
   
   else if(functionName == "Machine-Learning Algorithms"){
+    resampleName <- formatName(paste0(functionName,"Resampling method"))
+    resample <- input[[resampleName]]
+    if(is.null(resample))
+      resample <- "none"
+    
+    nfoldsName <- formatName(paste0(resampleName,"Number of folds",resample))
+    nfolds <- input[[nfoldsName]]
+    nrepatsName <- formatName(paste0(resampleName,"Number of repeats",resample))
+    nrepeats <- input[[nrepatsName]]
+    nitersName <- formatName(paste0(resampleName,"Number of resampling iterations",resample))
+    niters <- input[[nitersName]]
+    
     preProcessName <- formatName(paste0(functionName,"Data Pre-processing"))
     preProcess <- input[[preProcessName]]
     if(preProcess == "None"){
       preProcess = NULL
     }
+    resample <- getRealName(resample)
     method <- getRealName(method)
     modelFit <- mlComb(markers = markers, status = status, event = event,
                        method = method, resample = resample, nfolds = nfolds,
