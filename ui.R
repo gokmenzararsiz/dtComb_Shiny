@@ -310,7 +310,7 @@ ui <- fluidPage(
                                                        column(12, align="left",
                                                               bsCollapse(id = "collapsePlot", open = "",
                                                                          
-                                                                         bsCollapsePanel("Distrubution Graphs", "",
+                                                                         bsCollapsePanel("Kernel density graphs", "",
                                                                                          tabsetPanel(id = "tabGroupdistribution",
                                                                                                      tabPanel(id="tabDistplotC",title = "Combination Score",
                                                                                                               fluidRow(
@@ -341,7 +341,7 @@ ui <- fluidPage(
                                                                                                      )
                                                                                                      
                                                                                          ), style = "distrCurv"),
-                                                                         bsCollapsePanel("Scatter Graphs", "",
+                                                                         bsCollapsePanel("Individual-value Graphs", "",
                                                                                          tabsetPanel(id = "tabGroupSctplot2",
                                                                                                      tabPanel(id="tabSctplotC",title = "Combination Score",
                                                                                                               fluidRow(
@@ -583,7 +583,7 @@ ui <- fluidPage(
                         # HTML('<ul><li><p> <b>Distribution graphs, Scatter graphs and Sensitivity&Specifity graphs</b> belonging to Combination score, Marker 1 and Marker 2 can be viewed in the relevant sub-tabs. </p></li></ul>'),
                         tags$ul( 
                           tags$li(
-                            p(tags$b("Distribution graphs, Scatter graphs and Sensitivity&Specifity graphs"), "belonging to Combination score, Marker 1 and Marker 2 can be viewed in the relevant sub-tabs.")
+                            p(tags$b("Kernel density graphs, Individual-value graphs and Sensitivity&Specifity graphs"), "belonging to Combination score, Marker 1 and Marker 2 can be viewed in the relevant sub-tabs.")
                           )
                         ),
                         

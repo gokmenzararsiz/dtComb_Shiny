@@ -71,7 +71,7 @@ getData<- function(input,session){
       sampleDataRoc <- input$sampleDataRoc
       
       if (sampleDataRoc == 1){
-        data <- exampleData1
+        data <- laparotomy
         dataHeader <- colnames(data)
         session$userData$dataHeader <- colnames(data)
       }
@@ -88,7 +88,7 @@ getData<- function(input,session){
       sampleData <- input$sampleData
       
       if (sampleData == 1){
-        data <- exampleData1
+        data <- laparotomy
         dataHeader <- colnames(data)
         session$userData$dataHeader <- colnames(data)
       }
