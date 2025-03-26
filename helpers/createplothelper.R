@@ -373,7 +373,7 @@ createDistPlot1 <- function(input, output, session){
     xlab("Marker 1") +
     ylab("Density") +
     geom_density(size = 2) +
-    ggtitle("Distribution Plot") +
+    ggtitle("Kernel density plot") +
     geom_vline(xintercept = model$ThresholdMarker1, linetype = "dotted") +
     theme_classic() +
     theme(plot.title = element_text(size = 22, face = "bold")) +
@@ -401,7 +401,7 @@ createDistPlot2 <- function(input, output, session){
     xlab("Marker 2") +
     ylab("Density") +
     geom_density(size = 2) +
-    ggtitle("Distribution Plot") +
+    ggtitle("Kernel density plot") +
     geom_vline(xintercept = model$ThresholdMarker2, linetype = "dotted") +
     theme_classic() +
     theme(plot.title = element_text(size = 22, face = "bold")) +
@@ -450,7 +450,7 @@ createSctPlot1 <- function(input, output, session){
     geom_point(size = 3) +
     geom_jitter(width = 0.40) +
     geom_point() +
-    ggtitle("Scatter Plot") +
+    ggtitle("Individual-value plot") +
     geom_hline(yintercept = model$ThresholdMarker1, linetype = "dotted") +
     theme_classic() +
     theme(plot.title = element_text(size = 22, face = "bold")) +
@@ -481,7 +481,7 @@ createSctPlot2 <- function(input, output, session){
     geom_point(size = 3) +
     geom_jitter(width = 0.40) +
     geom_point() +
-    ggtitle("Scatter Plot") +
+    ggtitle("Individual-value plot") +
     geom_hline(yintercept = model$ThresholdMarker2, linetype = "dotted") +
     theme_classic() +
     theme(plot.title = element_text(size = 22, face = "bold")) +
