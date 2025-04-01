@@ -445,10 +445,10 @@ createSctPlot1 <- function(input, output, session){
   
   
   ggplot(marker1Data, aes(x=Labels, y=Marker1,  
-                                            color=Labels)) + geom_point(size = 3) +
+                                            color=Labels)) + geom_point(size = 2) +
     ylab("Marker 1") +
-    geom_point(size = 3) +
-    geom_jitter(width = 0.40) +
+    ggplot2::geom_point(size = 2) +
+    ggplot2::geom_jitter(width = 0.40, size = 2) +
     geom_point() +
     ggtitle("Individual-value plot") +
     geom_hline(yintercept = model$ThresholdMarker1, linetype = "dotted") +
@@ -476,10 +476,10 @@ createSctPlot2 <- function(input, output, session){
   
   
   ggplot(marker2Data, aes(x=Labels, y=Marker2,  
-                                            color=Labels)) + geom_point(size = 3) +
+                                            color=Labels)) + geom_point(size = 2) +
     ylab("Marker 2") +
-    geom_point(size = 3) +
-    geom_jitter(width = 0.40) +
+    ggplot2::geom_point(size = 2) +
+    ggplot2::geom_jitter(width = 0.40, size = 2) +
     geom_point() +
     ggtitle("Individual-value plot") +
     geom_hline(yintercept = model$ThresholdMarker2, linetype = "dotted") +
