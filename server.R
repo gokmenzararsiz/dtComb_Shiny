@@ -413,7 +413,7 @@ server <- function(input, output, session) {
     req(input$goButton)
     
     
-    createSenSpePlotC(input = input,output = output,session)
+    hush(createSenSpePlotC(input = input,output = output,session))
     
   }, height = 400, width = 500)
   
@@ -437,7 +437,7 @@ server <- function(input, output, session) {
     req(input$goButton)
     
     
-    createDistPlotC(input = input,output = output,session)
+    hush(createDistPlotC(input = input,output = output,session))
     
   }, height = 400, width = 500)
   
@@ -459,7 +459,7 @@ server <- function(input, output, session) {
   
   output$SctplotC <- renderPlot({
     req(input$goButton)
-    createSctPlotC(input = input,output = output,session)
+    hush(createSctPlotC(input = input,output = output,session))
     
   }, height = 400, width = 500)
   
