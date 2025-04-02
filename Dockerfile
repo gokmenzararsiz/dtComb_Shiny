@@ -19,6 +19,6 @@ RUN R -e "install.packages('./no_cran_packages/obliqueRF_0.3.tar.gz', repos = NU
 RUN R -e "install.packages('./no_cran_packages/nodeHarvest_0.7-3.tar.gz', repos = NULL, type = 'source')"
 RUN R -e "install.packages('./no_cran_packages/FCNN4R_0.6.2.tar.gz', repos = NULL, type = 'source')"
 RUN R -e "install.packages('./no_cran_packages/extraTrees_1.0.5.tar.gz', repos = NULL, type = 'source')"
-RUN R -e "install.packages('./no_cran_packages/kohonen_3.0.12.tar.gz, repos = NULL, type = 'source')"
+RUN R -e "install.packages('./no_cran_packages/kohonen_3.0.12.tar.gz', repos = NULL, type = 'source')"
 
 EXPOSE 3838
