@@ -422,11 +422,8 @@ createDistPlotC <- function(input, output, session){
   
   status <- factor(data[, 1], levels = unique(data[, 1]))
   
-  if(is.null(session$userData$plotC)){
+  session$userData$plotC <- plotComb(model, status)
     
-    session$userData$plotC <- plotComb(model, status)
-    
-  }
   session$userData$plotC$plotDensity
   
 }
@@ -502,11 +499,8 @@ createSctPlotC <- function(input, output, session){
   
   status <- factor(data[, 1], levels = unique(data[, 1]))
   
-  if(is.null(session$userData$plotC)){
+  session$userData$plotC <- plotComb(model, status)
     
-    session$userData$plotC <- plotComb(model, status)
-    
-  }
   session$userData$plotC$plotScatter
   
 }
@@ -576,11 +570,8 @@ createSenSpePlotC <- function(input, output, session){
   
   status <- factor(data[, 1], levels = unique(data[, 1]))
   
-  if(is.null(session$userData$plotC)){
+  session$userData$plotC <- plotComb(model, status)
     
-    session$userData$plotC <- plotComb(model, status)
-    
-  }
   session$userData$plotC$plotSensSpec
   
   # ggplot(data, aes(x=status, y=data[,3], colour=status)) + geom_point() +

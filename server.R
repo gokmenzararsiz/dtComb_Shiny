@@ -468,12 +468,19 @@ server <- function(input, output, session) {
                       selected = "Plots"
     )
     
-    output$ROCplot <- renderPlot({
-      hush(createROCPlot(input = input,output = output,session))
-    }, height = 400, width = 500)
-    
-    
   }) 
+  
+  # Reaktif bir değişken oluştur
+  plotData <- eventReactive(input$goButton, {
+    # Grafik için gerekli verileri burada hesaplayın
+    createROCPlot(input = input, output = output, session)
+  })
+  
+  # Grafiği render etmek için reaktif değişkeni kullanın
+  output$ROCplot <- renderPlot({
+    req(plotData())  # Sadece plotData tetiklendiğinde çalışır
+    hush(plotData())
+  }, height = 400, width = 500)
   
   observeEvent(input$goButtonAnalysis, {
     if(input$dataInput == 1 && (is.null(input$selectStatus1) || is.null(input$selectMarker1)||

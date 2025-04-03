@@ -31,11 +31,15 @@ controlMultcombMarkerCount <- function(input){
   
   return(isActive)
 } 
-hush=function(code){
-  sink(file = NULL, append = FALSE, type = c("output", "message"),
-       split = FALSE)
-  tmp = code
-  sink()
+
+hush <- function(code) {
+  tmp <- NULL
+  tryCatch({
+    sink(tempfile())  # Geçici dosyaya yönlendir
+    tmp = code
+  }, finally = {
+    if (sink.number() > 0) sink(NULL)  # Sadece açıksa kapat
+  })
   return(tmp)
 }
 color.gradient <- function(x, colors=c("blue","white","red"), colsteps=100) {
