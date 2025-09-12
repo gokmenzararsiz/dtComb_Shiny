@@ -42,7 +42,7 @@ ui <- fluidPage(
                                         </div>
                                         </div>
                                      '),  
-                        HTML('<p align="justify"> If you use this tool for your research please cite: ???</p>')
+                        HTML('<p align="justify"> If you use this tool for your research please cite:</p>')
                         
                         
                         
@@ -155,7 +155,6 @@ ui <- fluidPage(
                                                      bsCollapse(id = "collapseExampleRoc", open = "AUC Table",
                                                                 bsCollapsePanel("ROC Coordinates", "",
                                                                                 tabsetPanel(id = "tabGroupCoordinatesRoc"
-                                                                                            # Dinamik olu??acak 1
                                                                                             
                                                                                 ), style = "rocCurv"),
                                                                 bsCollapsePanel("AUC Table", "",
@@ -166,12 +165,12 @@ ui <- fluidPage(
                                                                                 , style = "multComb"),
                                                                 bsCollapsePanel("Cut Points", "",
                                                                                 tabsetPanel(id = "tabGroupCutPointsRoc"
-                                                                                            # Dinamik olu??acak 2
+                                                                                           
                                                                                 ), style = "multComb"),
                                                                 
                                                                 bsCollapsePanel("Performance Measures", "",
                                                                                 tabsetPanel(id = "tabGroupDiagStatRoc"
-                                                                                            # Dinamik Olu??acak 3
+                                                                                            
                                                                                             
                                                                                 )
                                                                                 , style = "diagStat")
@@ -471,31 +470,31 @@ ui <- fluidPage(
                         HTML('<b id = "linComb">Linear Combination Methods</b> '),
                         HTML('<ul><li><p> <i> Scoring </i></p></li></ul>'),
                         HTML('<ul> The binary logistic regression model is used. However, for a more straightforward interpretation, slope values are rounded to a given <b>digit number</b>, and the combination score is computed. </ul>'),
-                        HTML('<ul><li><p> <i> Su & Liu???s </i></p></li></ul>'),
-                        HTML('<ul> Su and Liu???s combination score is obtained by using <b>Fisher???s discriminant function</b> under the assumption of a multivariate normal distribution model and proportional covariance matrices.</ul>'),
+                        HTML('<ul><li><p> <i> Su & Liu&#39;s </i></p></li></ul>'),
+                        HTML('<ul> Su and Liu&#39;s combination score is obtained by using <b>Fisher&#39;s discriminant function</b> under the assumption of a multivariate normal distribution model and proportional covariance matrices.</ul>'),
                         HTML('<ul><li><p> <i> Logistic regression </i></p></li></ul>'), 
                         HTML('<ul> A binary logistic regression model is fitted using the <b>maximum-likelihood method</b>.</ul>'),
                         HTML('<ul><li><p> <i> Min-Max </i></p></li></ul>'), 
-                        HTML('<ul> This method linearly combines the minimum and maximum values of the markers by finding a <b> parameter ??</b> that maximizes the corresponding <b>Mann-Whitney statistic</b>.</ul>'),
-                        HTML('<ul><li><p> <i> Pepe & Thompson???s </i></p></li></ul>'), 
-                        HTML('<ul>Uses the same binary logistic regression model. The combination score is obtained by proportioning the slope values to calculate the <b>?? parameter</b> .</ul>'),
-                        HTML('<ul><li><p> <i> Pepe, Cai & Langton???s  </i></p></li></ul>'),    
+                        HTML('<ul> This method linearly combines the minimum and maximum values of the markers by finding a <b> parameter α </b> that maximizes the corresponding <b>Mann-Whitney statistic</b>.</ul>'),
+                        HTML('<ul><li><p> <i> Pepe & Thompson&#39;s </i></p></li></ul>'), 
+                        HTML('<ul>Uses the same binary logistic regression model. The combination score is obtained by proportioning the slope values to calculate the <b>α parameter</b> .</ul>'),
+                        HTML('<ul><li><p> <i> Pepe, Cai & Langton&#39;s  </i></p></li></ul>'),    
                         HTML('<ul>Pepe, Cai, and Langton combination score is obtained by using <b>AUC as the parameter</b> of a logistic regression model</ul>'),
                         HTML('<ul><li><p> <i> Minimax </i></p></li></ul>'), 
-                        HTML('<ul>Minimax method is an extension of Su & Liu???s method.</ul>'),
-                        HTML('<ul><li><p> <i> Todor & Saplacan???s</i></p></li></ul>'), 
-                        HTML('<ul>Todor and Saplacan???s method uses trigonometric functions to calculate the combination score. The combination score is obtained by the <b>?? value</b> that optimizes the corresponding AUC.</ul>'),
+                        HTML('<ul>Minimax method is an extension of Su & Liu&#39;s method.</ul>'),
+                        HTML('<ul><li><p> <i> Todor & Saplacan&#39;s</i></p></li></ul>'), 
+                        HTML('<ul>Todor and Saplacan&#39;s method uses trigonometric functions to calculate the combination score. The combination score is obtained by the <b> <i>t</i> value</b> that optimizes the corresponding AUC.</ul>'),
                         HTML('<div style="left;"><img src="images/manual/linComb.png" width=400/></div>'),
                         
                         HTML('<b id="nonlinComb">Nonlinear Combination Methods</b> '),
                         HTML('<ul><li><p> <i> Polynomial Regression </i></p></li></ul>'),
                         HTML('<ul> The method builds a logistic regression model with the feature space created and returns the probability of a positive event for each observation. It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<ul><li><p> <i> Ridge Regression </i></p></li></ul>'),
-                        HTML('<ul> Ridge regression is a penalizing method used to estimate the coefficients of highly correlated variables and in this case the polynomial feature space created from two biomarkers. For the implementation of the method, <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"> glmnet</a> library  is used with two functions: <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/cv.glmnet" target="_blank"> cv.glmnet()</a> to run a cross validation  model to determine the tuning parameter <b>??</b> and <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/glmnet" target="_blank"> glmnet()</a> to fit the model with the selected tuning parameter.It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
+                        HTML('<ul> Ridge regression is a penalizing method used to estimate the coefficients of highly correlated variables and in this case the polynomial feature space created from two biomarkers. For the implementation of the method, <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"> glmnet</a> library  is used with two functions: <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/cv.glmnet" target="_blank"> cv.glmnet()</a> to run a cross validation  model to determine the tuning parameter <b> λ </b> and <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1-4/topics/glmnet" target="_blank"> glmnet()</a> to fit the model with the selected tuning parameter.It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<ul><li><p> <i> Lasso Regression </i></p></li></ul>'), 
                         HTML('<ul> Lasso regression is also a penalizing method with one difference is that at the end this method returns the coefficients of <b>some features as 0</b>, makes this method useful for feature elimination as well. The implementation is similar to Ridge regression, cross validation for parameter selection and model fit are implemented with <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"> glmnet</a> library.It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<ul><li><p> <i> Elastic-Net Regression </i></p></li></ul>'), 
-                        HTML('<ul> Elastic Net regression is obtained by combining the penalties of Ridge and Lasso regression to get the best of both models. The model again includes a tuning parameter ?? as well as a <b>mixing parameter ??</b> taken form the user which takes a value between 0 (ridge) and 1 (lasso) to determine the weights of the loss functions of Ridge and Lasso regressions. It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
+                        HTML('<ul> Elastic Net regression is obtained by combining the penalties of Ridge and Lasso regression to get the best of both models. The model again includes a tuning parameter <b> α </b>  as well as a <b> mixing parameter λ </b> taken form the user which takes a value between 0 (ridge) and 1 (lasso) to determine the weights of the loss functions of Ridge and Lasso regressions. It is implemented with <b>degrees</b> of the fitted polynomials taken from the user.</ul>'),
                         HTML('<b>In nonlinear approaches, polynomial, ridge and lasso regression methods, an interaction that may exist between two diagnostic tests can be included in the model. For this, the Include of interaction option must be selected as TRUE.</b>'),
                         HTML('<ul><li><p> <i> Splines </i></p></li></ul>'), 
                         HTML('<ul>With the applications of regression models in a polynomial feature space the second non-linear approach to combining biomarkers comes from applying several regression models to the dataset using a function derived from piecewise polynomials. Splines are implemented with <b>degrees of freedom</b> and <b>degrees</b> of the fitted polynomials taken from the user. For the implementation <a href="https://www.rdocumentation.org/packages/splines/versions/3.6.2" target="_blank"> splines</a> library  is used to build piecewise logistic regression models with base splines.</ul>'),
