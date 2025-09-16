@@ -346,7 +346,7 @@ createROCPlot <- function(input, output, session){
   createAnalysis(input = input,output = output,session)
   output$downloadModel <- downloadHandler(
     filename = function() {
-      paste("modelFit", "Rdata", sep = ".") 
+      paste("modelFit", "rda", sep = ".") 
     },
     content = function(file) {
       saveRDS(modelFit,file)
