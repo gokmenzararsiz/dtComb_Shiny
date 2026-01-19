@@ -188,7 +188,7 @@ createROCPlotRoc <- function(input, output, session){
 }
 
 createROCPlot <- function(input, output, session){
-
+  getData(input,session)
   rawData <- session$userData$data
   dataInput <- input$dataInput
   
