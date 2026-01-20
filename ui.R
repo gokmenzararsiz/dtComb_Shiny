@@ -12,7 +12,7 @@ cutoffMethod <- generalParameters[which(generalParameters[, 1] == "cutoff.method
 ui <- fluidPage(
   includeCSS("www/css/bootstrap.min.css"),
   includeCSS("www/css/style.css"),
-  tags$script(src = "js/site.js"),
+  tags$script(src = "js/site.js?1"),
   tags$script(HTML("
     $(document).on('click', '.panel-heading', function() {
        setTimeout(function() {
