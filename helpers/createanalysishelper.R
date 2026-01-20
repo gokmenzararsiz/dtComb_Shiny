@@ -814,3 +814,32 @@ createAnalysis <- function(input,output, session){
   
   
 }
+multCombTable <- function(input,output, session,collapseTrigger){
+  
+  multCombData <- reactive({
+    # Bu reaktif, model hesaplandığında veya panel tıklandığında veriyi hazırlar
+    input$goButton # Hesapla butonu
+    collapseTrigger()      # Panel tıklaması
+    
+    # Veri yoksa sessizce çık
+    req(session$userData$model$MultComp_table)
+    
+    raw_table <- session$userData$model$MultComp_table
+    nameData <- raw_table[, 1:2]
+    p.value <- raw_table[, 8]
+    calData <- round(raw_table[, -c(1, 2, 8)], 3)
+    data <- data.frame(nameData, calData, p.value)
+    colnames(data) <- c("Marker1 (A)", "Marker2 (B)", "AUC (A)", "AUC (B)",
+                        "|A-B|", "SE(|A-B|)", "z", "p-value")
+    return(data)
+  })
+  
+  multCombTableOptions <- options
+  multCombTableOptions$columnDefs <- list(list(className = 'dt-center',targets=2:7))
+  output$MultCombTable <- renderDataTable({
+    # Sadece multCombData değiştiğinde çalışır
+    data <- multCombData()
+    return(data)
+  }, extensions = 'Buttons', options = multCombTableOptions)   
+  outputOptions(output, "MultCombTable", suspendWhenHidden = FALSE)
+}
