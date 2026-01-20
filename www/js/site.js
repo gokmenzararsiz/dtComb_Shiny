@@ -51,7 +51,16 @@ $(document).on('shiny:inputchanged', function (event) {
 
 $(document).on('shiny:connected', function (event) {
     $(".aboutSidebarPanel").attr("class","aboutSidebarPanel")
-
+    $('#collapseExample').on('click', '.panel-heading', function() {
+        var panelTitle = $(this).text().trim();
+        console.log('Panel tıklandı: ' + panelTitle);
+        
+        // Shiny'ye bildirim gönder
+        Shiny.onInputChange('panelClicked', {
+          panelName: panelTitle,
+          timestamp: Date.now()
+        });
+      });
     // document.querySelectorAll("ul[role='tablist']")[0].style.marginBottom  = "10px";
     //$("#RawData").css("width","");
     //$("#RawData").add("width","");

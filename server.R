@@ -15,6 +15,204 @@ options(shiny.maxRequestSize=30*1024^2)
 source("helpers/helpers.R")
 # updateSelectStatus <- function(input,selectName,eventName)
 server <- function(input, output, session) {
+
+ collapseTrigger <- reactiveVal(0)
+  
+  observeEvent(input$panelClicked, {
+    panelName <- input$panelClicked$panelName
+    print(paste("Panel tıklandı:", panelName))
+    
+    # Panel adına göre işlem yap
+    if(panelName == "ROC Coordinates") {
+      print("ROC Coordinates paneli açıldı")
+      collapseTrigger(collapseTrigger() + 1)      
+      
+    } else if(panelName == "AUC Table") {
+      print("AUC Table paneli açıldı")
+      collapseTrigger(collapseTrigger() + 1)      
+      
+    } else if(panelName == "Multiple Comparison Table") {
+      print("Multiple Comparison Table paneli açıldı")
+      collapseTrigger(collapseTrigger() + 1)      
+    } else if(panelName == "Cut Points") {
+      print("Cut Points paneli açıldı")
+      collapseTrigger(collapseTrigger() + 1)      
+      
+    } else if(panelName == "Performance Measures") {
+      print("Performance Measures paneli açıldı")
+      collapseTrigger(collapseTrigger() + 1)      
+      
+    }
+  })
+  
+  # 1. Reaktif Veri Hazırlama Bloğu
+  diagStatCombinationData <- reactive({
+    # Tetikleyiciler
+    input$goButton
+    collapseTrigger()
+    
+    # Veri Güvenliği: Modelin bu parçaları yoksa dur
+    req(session$userData$model$DiagStatCombined$tab)
+    req(session$userData$model$DiagStatCombined$detail)
+    
+    # Ham verileri çek
+    diagTab <- session$userData$model$DiagStatCombined$tab
+    diagDetail <- session$userData$model$DiagStatCombined$detail
+    
+    # Statistic Etiketleri
+    StatisticLabels <- c(
+      "Apparent prevalence", "True prevalence", "Sensitivity", "Specificity",
+      "Correctly classified proportion", "delete1", "delete2", "Youden",
+      "Positive predictive value", "Negative predictive value",
+      "Positive likelihood ratio", "Negative likelihood ratio",
+      "delete3", "delete4", "False T+ proportion for true D-",
+      "False T- proportion for true D+", "False T+ proportion for T+",
+      "False T- proportion for T-"
+    )
+    
+    # MANTIK: Eğer detail bir data.frame ise (Detaylı tablo modu)
+    if(is.data.frame(diagDetail)) {
+      
+      # Detay tablosunu düzenle
+      df_detail <- diagDetail[,-1, drop = FALSE] # İlk sütunu sil
+      df_detail <- data.frame(Statistic = StatisticLabels, df_detail)
+      df_detail <- df_detail[-c(6, 7, 8, 13, 14), ] # Gereksiz satırları sil
+      
+      # Sayısal sütunları yuvarla (2, 3 ve 4. sütunlar)
+      df_detail[, 2:4] <- lapply(df_detail[, 2:4], function(x) round(as.numeric(x), 3))
+      rownames(df_detail) <- NULL
+      
+      return(list(main = diagTab, detail = df_detail, mode = "complex"))
+      
+    } else {
+      # MANTIK: Eğer detail liste formatındaysa (Basit tabloya ekleme modu)
+      tempTab <- diagTab
+      
+      # Eklenecek değerler listesi
+      mappings <- list(
+        "Apparent prevalence" = diagDetail$ap,
+        "True prevalence" = diagDetail$tp,
+        "Sensitivity" = diagDetail$se,
+        "Specificity" = diagDetail$sp,
+        "Positive predictive value" = diagDetail$pv.pos,
+        "Negative predictive value" = diagDetail$pv.neg,
+        "Positive likelihood ratio" = diagDetail$lr.pos,
+        "Negative likelihood ratio" = diagDetail$lr.neg,
+        "False T+ proportion for true D-" = diagDetail$p.tpdn,
+        "False T- proportion for true D+" = diagDetail$p.tndp,
+        "False T+ proportion for T+" = diagDetail$p.dntp,
+        "False T- proportion for T-" = diagDetail$p.dptn,
+        "Correctly classified proportion" = diagDetail$diag.ac
+      )
+      
+      # Döngü ile tabloyu büyüt
+      for(name in names(mappings)) {
+        row_val <- round(mappings[[name]], 3)
+        tempTab[name, ] <- row_val
+      }
+      
+      return(list(main = tempTab, detail = NULL, mode = "simple"))
+    }
+  })
+  
+  # 2. Üst Tablo Render (DiagStatCombination)
+  output$DiagStatCombination <- renderDataTable({
+    res <- diagStatCombinationData()
+    req(res$main)
+    
+    datatable(res$main, 
+              extensions = 'Buttons',
+              options = list(
+                dom = 'Bfrtip',
+                columnDefs = list(list(className = 'dt-center', targets = "_all"))
+              ))
+  })
+  
+  # 3. Alt Tablo Render (DiagStatCombinationDetail)
+  output$DiagStatCombinationDetail <- renderDataTable({
+    res <- diagStatCombinationData()
+    # Sadece kompleks modda (data.frame olduğunda) çiz
+    req(res$mode == "complex", res$detail)
+    
+    datatable(res$detail, 
+              extensions = 'Buttons',
+              options = list(
+                dom = 'Bfrtip',
+                pageLength = 13,
+                lengthMenu = list(c(13, 30, 50, -1), c('13', '30', '50', 'All')),
+                columnDefs = list(list(className = 'dt-center', targets = "_all"))
+              ))
+  })
+  
+  # 4. Askıdan Çıkar (Resize problemini ve boş gelme sorununu çözer)
+  outputOptions(output, "DiagStatCombination", suspendWhenHidden = FALSE)
+  outputOptions(output, "DiagStatCombinationDetail", suspendWhenHidden = FALSE)
+  
+  multCombTable(input = input,output = output,session = session,collapseTrigger)
+  rOCCoordinatesCombinationData <- reactive({
+    # Bu reaktif, model hesaplandığında veya panel tıklandığında veriyi hazırlar
+    input$goButton # Hesapla butonu
+    collapseTrigger()      # Panel tıklaması
+    
+    # Veri yoksa sessizce çık
+    req(session$userData$model$ROC_coordinates)
+    
+    rOC_coordinates <- session$userData$model$ROC_coordinates
+    coordinates <-data.frame(Markers = rOC_coordinates$Marker[which(rOC_coordinates$Marker == "Combination")],
+                             Threshold = round(rOC_coordinates$Threshold[which(rOC_coordinates$Marker == "Combination")], 3),
+                             Specificity = round(rOC_coordinates$Specificity[which(rOC_coordinates$Marker == "Combination")], 3),
+                             Sensitivity = round(rOC_coordinates$Sensitivity[which(rOC_coordinates$Marker == "Combination")], 3)) 
+    return(coordinates)
+  })
+  output$rOCCoordinatesCombination <- renderDataTable({
+    data<- rOCCoordinatesCombinationData()
+    return(data)
+  },extensions = 'Buttons',options =options)
+  outputOptions(output, "rOCCoordinatesCombination", suspendWhenHidden = FALSE)
+  
+  # 1. Veri Hazırlama (Reactive)
+  cutPointsData <- reactive({
+    # Tetikleyiciler
+    input$goButton 
+    collapseTrigger() 
+    
+    # Veri Güvenliği
+    req(session$userData$model$Cuttoff.method)
+    
+    # Modelden verileri çek (Hata payını azaltmak için kontrollü çekim)
+    cutoff_name <- if(!is.null(session$userData$model$Cuttoff.method)) session$userData$model$Cuttoff.method else "N/A"
+    
+    # Criterion.c kontrolü
+    crit_c <- if(!is.null(session$userData$model$Criterion.c)) round(session$userData$model$Criterion.c, 3) else "-"
+    
+    # ThresholdCombined kontrolü
+    thresh_c <- if(!is.null(session$userData$model$ThresholdCombined)) round(session$userData$model$ThresholdCombined, 3) else "-"
+    
+    # Matris yerine Data Frame oluşturuyoruz (DT için en güvenli yol)
+    df <- data.frame(
+      "Metric Name" = c("Optimal cut-off method", "Optimal criterion", "Optimal cut-off point"),
+      "Value" = c(as.character(cutoff_name), as.character(crit_c), as.character(thresh_c)),
+      stringsAsFactors = FALSE
+    )
+    
+    return(df)
+  })
+  
+  # 2. Tablo Render
+  output$CutPointsCombination <- renderDataTable({
+    df <- cutPointsData()
+    datatable(df, 
+              options = list(
+                autoWidth = FALSE,  # Shiny'nin kafasına göre genişlik vermesini engelle
+                scrollX = TRUE, 
+                autoWidth = TRUE,
+                columnDefs = list(list(width = '100px', targets = "_all"))
+              ))
+  })
+  
+  # 3. Gizli Paneli Uyandır
+  outputOptions(output, "CutPointsCombination", suspendWhenHidden = FALSE)
+  
   output$SensSpecPlot2 <- renderPlot({
     req(input$goButton)
     
