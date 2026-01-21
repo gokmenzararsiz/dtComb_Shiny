@@ -173,6 +173,11 @@ createFunctionParams <- function(functionName,input,output,session){
     subElementName <-paste0(formatName(name = functionName),formatName(name = name))
     if(type == "select"){
       values <- as.matrix(unlist(strsplit(as.character(funcParams[i,4]), ',', fixed=T)))
+       values <- values[values != c("OOB", "LOOCV", "LGOCV")]
+
+      if(functionName == "Machine-Learning Algorithms" && name == "Resampling method"){
+       session$userData$machineLearningResamples <- values
+      }
       if(length(values)>0){
         inputElements <- append(inputElements,list(selectInput(subElementName, name,
                                                                choices = values,
