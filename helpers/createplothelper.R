@@ -313,12 +313,31 @@ createROCPlot <- function(input, output, session){
     }
     resample <- getRealName(resample)
     method <- getRealName(method)
+    resampleNotNone <- c("svmLinearWeights", "svmRadialWeights", "svmLinear", "svmPoly", "svmRadial")
+    if (method %in% resampleNotNone && resample == "none") {
+      shinyalert(
+        title = "Attention",
+        text = "The selected method cannot be used with resampling set to 'none'. Please select an appropriate resampling method or choose a different analysis option.",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = FALSE,
+        html = FALSE,
+        type = "error",
+        showConfirmButton = TRUE,
+        showCancelButton = FALSE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#AEDEF4",
+        timer = 0,
+        imageUrl = "",
+        animation = TRUE
+      )
+    }else {
     modelFit <- mlComb(markers = markers, status = status, event = event,
                        method = method, resample = resample, nfolds = nfolds,
                        nrepeats = nrepeats, niters = niters, preProcess = preProcess, 
                        direction = direction, cutoff.method = cutoff.method)
     
-    
+    }
   }
   else if(functionName == "Mathematical Operators"){
     
