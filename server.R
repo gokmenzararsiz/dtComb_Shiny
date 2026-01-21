@@ -326,6 +326,23 @@ server <- function(input, output, session) {
       return()
     if(input$methods == "")
       return()
+   subMethodNames <- c("Random Forest")
+    if(input$methods %in% subMethodNames){
+      # 1. Mevcut fonksiyon grubuna göre temel listeyi matristen çek
+      currentResaples <- session$userData$machineLearningResamples
+      
+      # 2. Üzerine OBB ekle (unique ile mükerrer kaydı engelle)
+      newChoices <- unique(c(currentResaples, "OOB"))
+      
+      # 3. Input'u güncelle
+      updateSelectInput(session, "MachineLearningAlgorithmsResamplingmethod",
+                        choices = newChoices) # Mevcut seçimi korumak için
+      
+    }else if(input$functions == "Machine-Learning Algorithms"){
+      currentResaples <- session$userData$machineLearningResamples
+      updateSelectInput(session, "MachineLearningAlgorithmsResamplingmethod",
+                        choices = currentResaples) # Mevcut seçimi korumak için
+    }
     if(!is.null(session$userData$subMethodElementsAppenedList) && session$userData$subMethodElementsAppendIsOk == TRUE)
       return()
     
