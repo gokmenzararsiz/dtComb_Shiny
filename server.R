@@ -15,6 +15,28 @@ options(shiny.maxRequestSize=30*1024^2)
 source("helpers/helpers.R")
 # updateSelectStatus <- function(input,selectName,eventName)
 server <- function(input, output, session) {
+  
+  observeEvent(input$panelClickedPlot, {
+    panelName <- input$panelClickedPlot$panelName
+    print(paste("Panel tıklandı:", panelName))
+    
+    # Panel adına göre işlem yap
+    if(panelName == "Kernel density graphs") {
+      print("Kernel density graphs")
+      updateTabsetPanel(session, "tabGroupdistribution",
+                        selected = "Combination Score")
+    } else if(panelName == "Individual-value Graphs") {
+      print("Individual-value Graphs")
+      updateTabsetPanel(session, "tabGroupSctplot2",
+                        selected = "Combination Score")
+      
+    } else if(panelName == "Sens. & Spec. Curve") {
+      print("Sens. & Spec. Curve")
+      updateTabsetPanel(session, "tabGroupSensSpeplot2",
+                        selected = "Combination Score")
+    }
+  })
+
 
  collapseTrigger <- reactiveVal(0)
   
@@ -212,6 +234,33 @@ server <- function(input, output, session) {
   
   # 3. Gizli Paneli Uyandır
   outputOptions(output, "CutPointsCombination", suspendWhenHidden = FALSE)
+  
+  
+  #-------------------------------------------
+
+  observeEvent(input$panelClickedRoc, {
+    panelName <- input$panelClickedRoc$panelName
+    updateTabsetPanel(session, "tabGroupPlotRoc",
+                      selected = "Plots"
+    )
+    updateTabsetPanel(session, "tabGroupPlotRoc",
+                      selected = "Results"
+    )
+    # Panel adına göre işlem yap
+    if(panelName == "ROC Coordinates") {
+      print("ROC Coordinates paneli açıldı")
+    } else if(panelName == "AUC Table") {
+      print("AUC Table paneli açıldı")
+    } else if(panelName == "Multiple Comparison Table") {
+      print("Multiple Comparison Table paneli açıldı 2222")
+    } else if(panelName == "Cut Points") {
+      print("Cut Points paneli açıldı")
+    } else if(panelName == "Performance Measures") {
+      print("Performance Measures paneli açıldı")
+    }
+  })
+  
+  
   
   output$SensSpecPlot2 <- renderPlot({
     req(input$goButton)
@@ -684,13 +733,37 @@ server <- function(input, output, session) {
     )
     
   }) 
-  
+
+  w <- Waiter$new(id = "ROCplot", html = waiter::spin_loaders(id = 1, color = "black", style = NULL),color = "white")
+
   # Reaktif bir değişken oluştur
   plotData <- eventReactive(input$goButton, {
+    createLoading(createROCPlot(input = input, output = output, session))
     # Grafik için gerekli verileri burada hesaplayın
-    createROCPlot(input = input, output = output, session)
   })
-  
+  createLoading <- function(res){
+    w$show()
+    progresSleep <- 0.3
+    
+    withProgress(message = 'Data in progress...', value = 0, {
+      
+      # 1. AŞAMA: Ağır Hesaplama (Döngü örneği)
+      n <- 10
+      for (i in 1:n) {
+        # İşlemi yaparken barı %90'a kadar kademeli artır
+        incProgress(0.9 / n, detail = paste("Calculating"))
+        Sys.sleep(progresSleep) # Gerçek hesaplamayı temsil eder
+      }
+      
+      # 2. AŞAMA: Hesaplama bitti, görselleştirme hazırlanıyor1§            
+      setProgress(0.99, detail = "The graph is being drawn, please wait...")
+      
+      # Asıl fonksiyonun sonucu burada üretilir
+      # hist() veya başka bir ağır fonksiyon
+      
+      return(res)
+    })
+  }
   # Grafiği render etmek için reaktif değişkeni kullanın
   output$ROCplot <- renderPlot({
     req(plotData())  # Sadece plotData tetiklendiğinde çalışır

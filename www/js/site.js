@@ -61,6 +61,26 @@ $(document).on('shiny:connected', function (event) {
           timestamp: Date.now()
         });
       });
+      
+    $('#collapseExampleRoc').on('click', '.panel-heading', function() {
+        var panelTitle = $(this).text().trim();
+
+        // Shiny'ye bildirim gönder
+        Shiny.onInputChange('panelClickedRoc', {
+          panelName: panelTitle,
+          timestamp: Date.now()
+        });
+      });
+      
+    $('#collapsePlot').on('click', '.panel-heading', function() {
+        var panelTitle = $(this).text().trim();
+
+        // Shiny'ye bildirim gönder
+        Shiny.onInputChange('panelClickedPlot', {
+          panelName: panelTitle,
+          timestamp: Date.now()
+        });
+      });
     // document.querySelectorAll("ul[role='tablist']")[0].style.marginBottom  = "10px";
     //$("#RawData").css("width","");
     //$("#RawData").add("width","");

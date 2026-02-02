@@ -814,6 +814,7 @@ createAnalysis <- function(input,output, session){
   
   
 }
+
 multCombTable <- function(input,output, session,collapseTrigger){
   
   multCombData <- reactive({
