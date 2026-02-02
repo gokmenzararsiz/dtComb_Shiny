@@ -1,5 +1,7 @@
 library(shinyBS)
 library(dtComb)
+library(shinycssloaders)
+library(waiter)
 load("parameters.Rdata")
 functionsData <- parameters$functions
 functionsData <- as.matrix(functionsData)
@@ -12,7 +14,7 @@ cutoffMethod <- generalParameters[which(generalParameters[, 1] == "cutoff.method
 ui <- fluidPage(
   includeCSS("www/css/bootstrap.min.css"),
   includeCSS("www/css/style.css"),
-  tags$script(src = "js/site.js?1"),
+  tags$script(src = "js/site.js?4"),
   tags$script(HTML("
     $(document).on('click', '.panel-heading', function() {
        setTimeout(function() {
@@ -314,7 +316,7 @@ ui <- fluidPage(
                                             tabPanel(id ="plot",title= "Plots", 
                                                      fluidRow(
                                                        column(10, align="center",
-                                                              
+                                                              useWaiter(), # Paketi UI'da aktif et
                                                               plotOutput(outputId = "ROCplot", width  = "500px",height = "400px")
                                                        ),
                                                        column(2, align="right",
@@ -325,7 +327,7 @@ ui <- fluidPage(
                                                               bsCollapse(id = "collapsePlot", open = "",
                                                                          
                                                                          bsCollapsePanel("Kernel density graphs", "",
-                                                                                         tabsetPanel(id = "tabGroupdistribution",
+                                                                                         tabsetPanel(id = "tabGroupdistribution",selected="Marker 1",
                                                                                                      tabPanel(id="tabDistplotC",title = "Combination Score",
                                                                                                               fluidRow(
                                                                                                                 column(10, align="center",
@@ -356,7 +358,7 @@ ui <- fluidPage(
                                                                                                      
                                                                                          ), style = "distrCurv"),
                                                                          bsCollapsePanel("Individual-value Graphs", "",
-                                                                                         tabsetPanel(id = "tabGroupSctplot2",
+                                                                                         tabsetPanel(id = "tabGroupSctplot2", selected="Marker 1",
                                                                                                      tabPanel(id="tabSctplotC",title = "Combination Score",
                                                                                                               fluidRow(
                                                                                                                 column(10, align="center",
@@ -387,7 +389,7 @@ ui <- fluidPage(
                                                                                          )
                                                                                          , style = "scattCurv"),
                                                                          bsCollapsePanel("Sens. & Spec. Curve", "",
-                                                                                         tabsetPanel(id = "tabGroupSensSpeplot2",
+                                                                                         tabsetPanel(id = "tabGroupSensSpeplot2",selected="Marker 1",
                                                                                                      tabPanel(id="tabSctplotC",title = "Combination Score",
                                                                                                               fluidRow(
                                                                                                                 column(10, align="center",
