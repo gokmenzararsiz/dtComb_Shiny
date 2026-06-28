@@ -4,7 +4,6 @@ functions <- parameters$functions
 
 methods <- parameters$methods
 functionParameters <- parameters$functionParameters
-functionSubParameters <- parameters$functionSubParameters
 methodParameters <- parameters$methodParameters
 generalParameters <- parameters$generalParameters
 realNames <- parameters$realNames
@@ -173,7 +172,6 @@ createFunctionParams <- function(functionName,input,output,session){
     subElementName <-paste0(formatName(name = functionName),formatName(name = name))
     if(type == "select"){
       values <- as.matrix(unlist(strsplit(as.character(funcParams[i,4]), ',', fixed=T)))
-       values <- values[values != c("OOB", "LOOCV", "LGOCV")]
 
       if(functionName == "Machine-Learning Algorithms" && name == "Resampling method"){
        session$userData$machineLearningResamples <- values
@@ -183,21 +181,7 @@ createFunctionParams <- function(functionName,input,output,session){
                                                                choices = values,
                                                                selected = FALSE,
                                                                multiple = FALSE)
-        ))
-        for (value in values) {
-          selectSubElems <- functionSubParameters[which(functionSubParameters[,1] == value),]
-          if(nrow(selectSubElems)>0){
-            subElementsAppenedList <- rbind(subElementsAppenedList, data.frame(
-              functionName = functionName,
-              name = name,
-              value = value,
-              subElementName = subElementName,
-              appenedConditionName = formatName(paste0("hdn",functionName))
-            ))
-            # creatrFunctionSubParams(functionName,name,value,subElementName)
-          }
-        }
-        
+        )) 
       }
     }
     else if(type == "number"){

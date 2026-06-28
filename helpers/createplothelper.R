@@ -229,7 +229,7 @@ createROCPlot <- function(input, output, session){
   resampleName <- formatName(paste0(functionName,method,"Resampling method"))
   resample <- input[[resampleName]]
   if(is.null(resample))
-    resample <- "none"
+    resample <- "None"
   standardizeName <- formatName(paste0(functionName,"Standardization method"))
   standardize <- input[[standardizeName]]
   if(is.null(standardize))
@@ -294,18 +294,19 @@ createROCPlot <- function(input, output, session){
   }
   
   else if(functionName == "Machine-Learning Algorithms"){
-    resampleName <- formatName(paste0(functionName,"Resampling method"))
+    resampleName <- formatName(paste0(functionName,method,"Resampling method"))
     resample <- input[[resampleName]]
     if(is.null(resample))
-      resample <- "none"
+      resample <- "None"
     
-    nfoldsName <- formatName(paste0(resampleName,"Number of folds",resample))
+    nfoldsName <- formatName(paste0(resampleName,resample,"Number of folds"))
     nfolds <- input[[nfoldsName]]
-    nrepatsName <- formatName(paste0(resampleName,"Number of repeats",resample))
+    nrepatsName <- formatName(paste0(resampleName,resample,"Number of repeats"))
     nrepeats <- input[[nrepatsName]]
-    nitersName <- formatName(paste0(resampleName,"Number of resampling iterations",resample))
+    nitersName <- formatName(paste0(resampleName,resample,"Number of resampling iterations"))
     niters <- input[[nitersName]]
-    
+    pName <- formatName(paste0(resampleName,resample,"p"))
+    p <- input[[pName]]
     preProcessName <- formatName(paste0(functionName,"Data Pre-processing"))
     preProcess <- input[[preProcessName]]
     if(preProcess == "None"){
@@ -313,31 +314,13 @@ createROCPlot <- function(input, output, session){
     }
     resample <- getRealName(resample)
     method <- getRealName(method)
-    resampleNotNone <- c("svmLinearWeights", "svmRadialWeights", "svmLinear", "svmPoly", "svmRadial")
-    if (method %in% resampleNotNone && resample == "none") {
-      shinyalert(
-        title = "Attention",
-        text = "The selected method cannot be used with resampling set to 'none'. Please select an appropriate resampling method or choose a different analysis option.",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = FALSE,
-        html = FALSE,
-        type = "error",
-        showConfirmButton = TRUE,
-        showCancelButton = FALSE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#AEDEF4",
-        timer = 0,
-        imageUrl = "",
-        animation = TRUE
-      )
-    }else {
+
     modelFit <- mlComb(markers = markers, status = status, event = event,
                        method = method, resample = resample, nfolds = nfolds,
                        nrepeats = nrepeats, niters = niters, preProcess = preProcess, 
-                       direction = direction, cutoff.method = cutoff.method)
+                       direction = direction, cutoff.method = cutoff.method,p = p)
     
-    }
+    
   }
   else if(functionName == "Mathematical Operators"){
     

@@ -18,20 +18,16 @@ server <- function(input, output, session) {
   
   observeEvent(input$panelClickedPlot, {
     panelName <- input$panelClickedPlot$panelName
-    print(paste("Panel tıklandı:", panelName))
-    
+
     # Panel adına göre işlem yap
     if(panelName == "Kernel density graphs") {
-      print("Kernel density graphs")
       updateTabsetPanel(session, "tabGroupdistribution",
                         selected = "Combination Score")
     } else if(panelName == "Individual-value Graphs") {
-      print("Individual-value Graphs")
       updateTabsetPanel(session, "tabGroupSctplot2",
                         selected = "Combination Score")
       
     } else if(panelName == "Sens. & Spec. Curve") {
-      print("Sens. & Spec. Curve")
       updateTabsetPanel(session, "tabGroupSensSpeplot2",
                         selected = "Combination Score")
     }
@@ -42,26 +38,19 @@ server <- function(input, output, session) {
   
   observeEvent(input$panelClicked, {
     panelName <- input$panelClicked$panelName
-    print(paste("Panel tıklandı:", panelName))
-    
     # Panel adına göre işlem yap
     if(panelName == "ROC Coordinates") {
-      print("ROC Coordinates paneli açıldı")
       collapseTrigger(collapseTrigger() + 1)      
       
     } else if(panelName == "AUC Table") {
-      print("AUC Table paneli açıldı")
       collapseTrigger(collapseTrigger() + 1)      
       
     } else if(panelName == "Multiple Comparison Table") {
-      print("Multiple Comparison Table paneli açıldı")
       collapseTrigger(collapseTrigger() + 1)      
     } else if(panelName == "Cut Points") {
-      print("Cut Points paneli açıldı")
       collapseTrigger(collapseTrigger() + 1)      
       
     } else if(panelName == "Performance Measures") {
-      print("Performance Measures paneli açıldı")
       collapseTrigger(collapseTrigger() + 1)      
       
     }
@@ -246,18 +235,6 @@ server <- function(input, output, session) {
     updateTabsetPanel(session, "tabGroupPlotRoc",
                       selected = "Results"
     )
-    # Panel adına göre işlem yap
-    if(panelName == "ROC Coordinates") {
-      print("ROC Coordinates paneli açıldı")
-    } else if(panelName == "AUC Table") {
-      print("AUC Table paneli açıldı")
-    } else if(panelName == "Multiple Comparison Table") {
-      print("Multiple Comparison Table paneli açıldı 2222")
-    } else if(panelName == "Cut Points") {
-      print("Cut Points paneli açıldı")
-    } else if(panelName == "Performance Measures") {
-      print("Performance Measures paneli açıldı")
-    }
   })
   
   

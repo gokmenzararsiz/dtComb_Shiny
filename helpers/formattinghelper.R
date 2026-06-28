@@ -8,6 +8,12 @@ formatName <- function(name){
 }
 getRealName <- function(name){
   realName <-  realNames[which(realNames[,1] == name),2]
+  if(length(realName)<=0){
+    name
+  }
+  else{
+    realName
+  }
 }
 controlMarkerCount <- function(input){
   isActive <- FALSE
