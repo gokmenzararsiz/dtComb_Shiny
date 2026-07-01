@@ -9,13 +9,17 @@ library(pROC)
 library(OptimalCutpoints)
 library(epiR)
 library(DT)
+library(shinyjs)
 
 options(shiny.maxRequestSize=30*1024^2)
 
 source("helpers/helpers.R")
 # updateSelectStatus <- function(input,selectName,eventName)
 server <- function(input, output, session) {
-  
+  observeEvent(input$copy_bibtex, {
+    runjs("navigator.clipboard.writeText(document.getElementById('bibtex_box').innerText)")
+    showNotification("BibTeX kopyalandı!", type = "message", duration = 2)
+  })
   observeEvent(input$panelClickedPlot, {
     panelName <- input$panelClickedPlot$panelName
 
@@ -47,7 +51,7 @@ server <- function(input, output, session) {
       
     } else if(panelName == "Multiple Comparison Table") {
       collapseTrigger(collapseTrigger() + 1)      
-    } else if(panelName == "Cut Points") {
+    } else if(panelName == "Cut-off Points") {
       collapseTrigger(collapseTrigger() + 1)      
       
     } else if(panelName == "Performance Measures") {
@@ -715,7 +719,9 @@ server <- function(input, output, session) {
 
   # Reaktif bir değişken oluştur
   plotData <- eventReactive(input$goButton, {
-    createLoading(createROCPlot(input = input, output = output, session))
+     createLoading(
+      createROCPlot(input = input, output = output, session)
+       )
     # Grafik için gerekli verileri burada hesaplayın
   })
   createLoading <- function(res){

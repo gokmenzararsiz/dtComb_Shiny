@@ -2,6 +2,8 @@ library(shinyBS)
 library(dtComb)
 library(shinycssloaders)
 library(waiter)
+library(shinyjs)
+
 load("parameters.Rdata")
 functionsData <- parameters$functions
 functionsData <- as.matrix(functionsData)
@@ -12,6 +14,7 @@ cutoffMethod <- generalParameters[which(generalParameters[, 1] == "cutoff.method
 
 
 ui <- fluidPage(
+  useShinyjs(),
   includeCSS("www/css/bootstrap.min.css"),
   includeCSS("www/css/style.css"),
   tags$script(src = "js/site.js?4"),
@@ -31,8 +34,8 @@ ui <- fluidPage(
     });
   ")),
   tags$head(HTML("<title>dtComb: Combining Two Diagnostic Tests</title>")),
-  tags$head(HTML("<link rel='shortcut icon' type='image/x-icon' href='images/favicon2.png'>")),
-  navbarPage(id = "generalTabSetPanel", HTML("<span><img src='images/Untitled.png' style='height:40px;margin-right:8px' /img> dtComb: Combining Two Diagnostic Tests</span>") ,
+  tags$head(HTML("<link rel='shortcut icon' type='image/x-icon' href='images/dtComb.png'>")),
+  navbarPage(id = "generalTabSetPanel", HTML("<span><img src='images/dtComb.png' style='height:45px;margin-right:8px' /img> dtComb: Combining Two Diagnostic Tests</span>") ,
              tabPanel("About",
                       sidebarPanel(class="aboutSidebarPanel",HTML('<left><img src="images/func.png" style="width:100%;height:auto" ></center>'), width = 2),
                       
@@ -45,23 +48,44 @@ ui <- fluidPage(
                                  The diagnostic accuracy performance and reliability of these diagnostic tests are taken into account when making these tests widely available. For some conditions, more than one diagnostic test may be available. Some of these diagnostic tests may even replace
                                  existing methods because they have better performance. In many studies, new diagnostic test performance measures with superior performance were obtained by using multiple diagnostic tests instead of one. The dtComb package includes diverse combination methods, 
                                 data standardization, and resampling methods available for combining two diagnostic tests.  </p></div>
-                                      <div class="col-md-6"><img src="images/roc.png" type="application/pdf"  style="width:auto;height:400px;margin-left:110px" ></div>
+                                      <div class="col-md-6"><img src="images/roc.png" type="application/pdf"  style="width:auto;height:300px;margin-left:110px" ></div>
                                       </div>
                                       '),
                         
                         HTML('<p align="justify"> Here the web-tool application is presented to implement the combination approaches available in the dtComb package. This application allows users to upload their own data (Data Upload tab), build models (Analysis tab), present the results (Graphs tab)
                            and make new predictions (Predict tab) from the model built. More detailed information about the combination methods and approaches through this web-tool and dtComb  package can be found in the paper of the package. All source codes are in GitHub.</p>'),
                         HTML('<div class="row">
-                                     <div class="col-lg-12" style="margin-top:35px">
-                                      <div class="col-lg-4"><center><img src="images/plot2.png" style="width:65%;height:auto" ></center></div>
-                                       <div class="col-lg-4"><center><img src="images/plot3.png" style="width:65%;height:auto" ></center></div>
-                                        <div class="col-lg-4"><center><img src="images/plot4.png" style="width:65%;height:auto" ></center></div>
+                                     <div class="col-lg-12" style="margin-top:15px">
+                                      <div class="col-lg-4"><center><img src="images/plot2.png" style="width:55%;height:auto" ></center></div>
+                                       <div class="col-lg-4"><center><img src="images/plot3.png" style="width:55%;height:auto" ></center></div>
+                                        <div class="col-lg-4"><center><img src="images/plot4.png" style="width:55%;height:auto" ></center></div>
                                         </div>
                                         </div>
                                      '),  
-                        HTML('<p align="justify"> If you use this tool for your research please cite:</p>')
-                        
-                        
+                        tagList(
+                          HTML('<p align="justify"> If you use this tool for your research please cite:</p>'),
+                          HTML('<p align="justify"> Taştan, S. I. Y., Gengeç, S. B., Koçhan, N., Zararsız, G. E., Korkmaz, S., & Zararsız, G. (2026). dtComb: A comprehensive R library and web tool for combining diagnostic tests. <i>The R Journal, 17</i>(4), 80–103. <a href="https://doi.org/10.32614/RJ-2025-036" target="_blank">https://doi.org/10.32614/RJ-2025-036</a></p>'),
+                          HTML('<p align="justify"><b>BibTeX:</b></p>'),
+                          tags$div(
+                            style = "position: relative;",
+                            actionButton("copy_bibtex", "📋 Copy",
+                                         style = "position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 2px 8px; z-index: 10;"),
+                            tags$pre(
+                              id = "bibtex_box",   # <-- id eklendi
+                              style = "background-color: #f5f5f5; padding: 12px; border-radius: 5px; font-size: 13px; white-space: pre-wrap; word-wrap: break-word;",
+                              "@article{RJ-2025-036,
+  author  = {Taştan, S. Ilayda Yerlitaş and Gengeç, Serra Bersan and Koçhan, Necla and Zararsız, Gözde Ertürk and Korkmaz, Selcuk and Zararsız, Gökmen},
+  title   = {dtComb: A Comprehensive R Library and Web Tool for Combining Diagnostic Tests},
+  journal = {The R Journal},
+  year    = {2026},
+  volume  = {17},
+  number  = {4},
+  pages   = {80--103},
+  doi     = {10.32614/RJ-2025-036}
+}"
+                            )
+                          )
+                        )
                         
                         ,width = 9),
              ),
@@ -180,7 +204,7 @@ ui <- fluidPage(
                                                                 bsCollapsePanel("Multiple Comparison Table", "",
                                                                                 DT::dataTableOutput("MultCombTableRoc")
                                                                                 , style = "multComb"),
-                                                                bsCollapsePanel("Cut Points", "",
+                                                                bsCollapsePanel("Cut-off Points", "",
                                                                                 tabsetPanel(id = "tabGroupCutPointsRoc"
                                                                                            
                                                                                 ), style = "multComb"),
@@ -274,7 +298,7 @@ ui <- fluidPage(
                                                                 bsCollapsePanel("Multiple Comparison Table", "",
                                                                                 DT::dataTableOutput("MultCombTable")
                                                                                 , style = "multComb"),
-                                                                bsCollapsePanel("Cut Points", "",
+                                                                bsCollapsePanel("Cut-off Points", "",
                                                                                 tabsetPanel(id = "tabGroupCutPoints",
                                                                                             tabPanel(id="TabCutPointsCombination",title = "Combination Score",
                                                                                                      DT::dataTableOutput("CutPointsCombination")
@@ -583,7 +607,7 @@ ui <- fluidPage(
                         HTML('<br>'),
                         HTML('<br>'),
                         
-                        h4("Cut points"),
+                        h4("Cut-off points"),
                         HTML('<ul><li><p>The user can see the cut-off method selected in the <b>advance section</b>, the Criterion and the cut-off point determined by this method. </p></li></ul>'),
                         HTML('<div style="left;"><img src="images/manual/cuttoff.png" width=900></div>'),
                         HTML('<br>'),
