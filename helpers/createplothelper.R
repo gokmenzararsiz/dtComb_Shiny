@@ -280,7 +280,7 @@ createROCPlot <- function(input, output, session){
     df1 <-  input[[df1Name]]
     df2 <-  input[[df2Name]]
     interactName <- formatName(paste0(functionName,method,'Include of interaction'))
-    include.interact <- input[[interactName]] 
+    include.interact <- ifelse(is.null(input[[interactName]]), FALSE, as.logical(input[[interactName]]) )
     alphaName <- formatName(paste0(functionName,method,"Mixing parameter"))
     alpha <- input[[alphaName]] 
     modelFit <- nonlinComb(markers = markers, status = status, event = event,
